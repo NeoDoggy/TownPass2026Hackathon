@@ -1,0 +1,31 @@
+{
+  "name": "townpass-checklist",
+  "private": true,
+  "workspaces": [
+    "checklist-shared",
+    "checklist-api",
+    "checklist-web"
+  ],
+  "engines": {
+    "node": ">=22.16"
+  },
+  "scripts": {
+    "dev:web": "npm run dev -w checklist-web",
+    "dev:api": "npm run dev -w checklist-api",
+    "typecheck": "tsc -p checklist-shared --noEmit && tsc -p checklist-api --noEmit && tsc -p checklist-web --noEmit",
+    "build": "npm run typecheck && npm run build -w checklist-web",
+    "test": "tsx --test checklist-shared/test/*.test.ts checklist-api/test/*.test.ts",
+    "test:a11y": "playwright test",
+    "db:migrate": "npm run migrate -w checklist-api",
+    "data:import": "npm run import -w checklist-api",
+    "db:seed": "npm run seed -w checklist-api",
+    "data:publish": "npm run publish:snapshot -w checklist-api"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.15.0",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
+  }
+}

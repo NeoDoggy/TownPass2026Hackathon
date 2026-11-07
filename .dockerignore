@@ -1,0 +1,11 @@
+.git
+.tools
+**/node_modules
+**/dist
+**/.env
+**/.env.local
+**/test-results
+**/playwright-report
+checklist-api/data/raw
+build
+.dart_tool

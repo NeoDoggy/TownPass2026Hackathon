@@ -1,0 +1,18 @@
+{$CHECKLIST_DOMAIN:localhost} {
+  encode zstd gzip
+  header {
+    Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self'; connect-src 'self' {$API_ORIGIN:}; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests"
+    Referrer-Policy "no-referrer"
+    X-Content-Type-Options "nosniff"
+    Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security "max-age=31536000"
+  }
+  handle /v1/* {
+    reverse_proxy api:3001
+  }
+  handle {
+    root * /srv
+    try_files {path} /index.html
+    file_server
+  }
+}

@@ -1,0 +1,778 @@
+{
+  "schemaVersion": 1,
+  "version": "1794055317370",
+  "createdAt": "2026-11-07T12:41:57.370Z",
+  "services": [
+    {
+      "slug": "marriage-divorce-certificate",
+      "items": [
+        {
+          "key": "applicant-id",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "當事人國民身分證",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ],
+          "documentCode": "national-id"
+        },
+        {
+          "key": "applicant-sign",
+          "form": "NA",
+          "kind": "DOCUMENT",
+          "note": "可於現場簽名，不必為此另備印章。",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "當事人印章或簽名",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "delegate-id",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE"
+          ],
+          "party": "DELEGATE",
+          "title": "受委託人國民身分證",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ],
+          "documentCode": "national-id"
+        },
+        {
+          "key": "delegate-sign",
+          "form": "NA",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE"
+          ],
+          "party": "DELEGATE",
+          "title": "受委託人印章或簽名",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "委託書",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "passport",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "當事人中華民國護照",
+          "groupId": "english-name",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_english"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "english-name-proof",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "載有英文姓名的證明文件",
+          "groupId": "english-name",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_english"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa-overseas",
+          "form": "NA",
+          "kind": "ACTION",
+          "note": "在國外作成的應備證件，應經我國駐外館處驗證。",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "先完成駐外館處驗證",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_document_region"
+              },
+              "OVERSEAS"
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa-mainland",
+          "form": "NA",
+          "kind": "ACTION",
+          "note": "在大陸地區、香港或澳門作成者，應經行政院設立或指定之機構或委託之民間團體（海基會）驗證。",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "先完成指定機構驗證",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_document_region"
+              },
+              "CHINA_HK_MO"
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "translation",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "note": "應備證件為外文者，另檢附經駐外館處驗證或國內公證人認證之中文譯本。",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "經驗證或認證的中文譯本",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_foreign_language"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "fee",
+          "form": "NA",
+          "kind": "FEE",
+          "note": "每份新臺幣 100 元。",
+          "unit": "份",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "party": "FEE",
+          "title": "結離婚證明書規費",
+          "quantity": 1,
+          "amountTwd": 100,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        }
+      ],
+      "modes": [
+        {
+          "code": "SELF",
+          "label": "本人親辦",
+          "allowed": true
+        },
+        {
+          "code": "DELEGATE",
+          "label": "委託他人",
+          "allowed": true
+        }
+      ],
+      "title": "中、英文結離婚證明書",
+      "agency": "臺北市各區戶政事務所",
+      "groups": [
+        {
+          "id": "english-name",
+          "rule": "ONE_OF",
+          "label": "英文姓名證明（擇一）"
+        }
+      ],
+      "parties": [
+        {
+          "code": "APPLICANT",
+          "label": "當事人要帶"
+        },
+        {
+          "code": "DELEGATE",
+          "label": "你（受委託人）要帶"
+        },
+        {
+          "code": "LEGAL_REP",
+          "label": "你（法定代理人）要帶"
+        },
+        {
+          "code": "FEE",
+          "label": "請備妥規費"
+        }
+      ],
+      "sources": [
+        {
+          "id": "taipei-household-20261007",
+          "url": "https://www-ws.gov.taipei/001/Upload/426/relfile/18393/8903/b6ef09df-e397-4ef6-b8b2-2dfcd26eaaa1.pdf",
+          "title": "臺北市政府申請案件處理時限表（戶政類）",
+          "clause": "項目 73；PDF 第 43 頁（印刷頁 42）",
+          "sha256": "d0e2a34c1d20eaa73c2756e9c6b7d0b40a4234d9d269dcee9489141fe0c39431",
+          "updatedAt": "2026-10-07",
+          "verifiedAt": "2026-11-07"
+        }
+      ],
+      "summary": "申請結婚或離婚證明書，確認委託文件、英文姓名證明及境外文件驗證。",
+      "category": "戶政",
+      "keywords": [
+        "結婚證明",
+        "離婚證明",
+        "英文結婚證明",
+        "結離婚證明書",
+        "婚姻證明",
+        "结婚证明"
+      ],
+      "questions": [
+        {
+          "code": "q_english",
+          "type": "BOOLEAN",
+          "prompt": "是否申請英文證明書？"
+        },
+        {
+          "code": "q_document_region",
+          "type": "ENUM",
+          "modes": [
+            "SELF",
+            "DELEGATE"
+          ],
+          "prompt": "應備證件在哪裡作成？",
+          "options": [
+            {
+              "label": "臺灣",
+              "value": "TW"
+            },
+            {
+              "label": "國外",
+              "value": "OVERSEAS"
+            },
+            {
+              "label": "大陸地區、香港或澳門",
+              "value": "CHINA_HK_MO"
+            }
+          ],
+          "helpText": "不確定時，清單會保留可能需要的驗證程序。"
+        },
+        {
+          "code": "q_foreign_language",
+          "type": "BOOLEAN",
+          "prompt": "應備證件是否為外文？"
+        }
+      ],
+      "revisionId": "cd12b473-a344-4d7a-8b4e-a19544638768",
+      "revisionNo": 1,
+      "verifiedAt": "2026-11-07",
+      "handlingUnit": "任一戶政事務所登記課。",
+      "processingTime": "臨櫃 1 小時；網路預約 2 日（仍須臨櫃）"
+    },
+    {
+      "slug": "seal-certificate",
+      "items": [
+        {
+          "key": "self-id",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF"
+          ],
+          "party": "APPLICANT",
+          "title": "國民身分證",
+          "groupId": "self-identity",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_no_current_id"
+              },
+              false
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ],
+          "documentCode": "national-id"
+        },
+        {
+          "key": "self-passport",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF"
+          ],
+          "party": "APPLICANT",
+          "title": "有效中華民國護照",
+          "groupId": "self-identity",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_no_current_id"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "self-entry",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF"
+          ],
+          "party": "APPLICANT",
+          "title": "入國證明文件",
+          "groupId": "self-identity",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_no_current_id"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "self-other",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF"
+          ],
+          "party": "APPLICANT",
+          "title": "其他身分證明文件",
+          "groupId": "self-identity",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_no_current_id"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "seal",
+          "form": "NA",
+          "kind": "DOCUMENT",
+          "modes": [
+            "SELF",
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "原登記之印鑑章",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ],
+          "documentCode": "registered-seal"
+        },
+        {
+          "key": "delegate-id",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE"
+          ],
+          "party": "DELEGATE",
+          "title": "受委任人身分證明文件",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "representative-id",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "modes": [
+            "LEGAL_REP"
+          ],
+          "party": "LEGAL_REP",
+          "title": "法定代理人身分證明文件",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "applicant-copy-id",
+          "form": "COPY",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "國民身分證",
+          "groupId": "applicant-copy",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "applicant-copy-passport",
+          "form": "COPY",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "有效中華民國護照",
+          "groupId": "applicant-copy",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "applicant-copy-entry",
+          "form": "COPY",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "入國證明文件",
+          "groupId": "applicant-copy",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "applicant-copy-other",
+          "form": "COPY",
+          "kind": "DOCUMENT",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "其他身分證明文件",
+          "groupId": "applicant-copy",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "note": "須由委任人親自簽名或蓋章，註明辦理事項、請領份數及使用目的。如需同時辦理印鑑登記或變更，請另洽戶所確認。",
+          "modes": [
+            "DELEGATE"
+          ],
+          "party": "APPLICANT",
+          "title": "委任書或授權書",
+          "quantity": 1,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "other-reps-id",
+          "form": "COPY",
+          "kind": "DOCUMENT",
+          "modes": [
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "其他法定代理人身分證明文件",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_multiple_reps"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "other-reps-poa",
+          "form": "ORIGINAL",
+          "kind": "DOCUMENT",
+          "note": "依來源第 3(4) 點附繳委任書及同意書；註明辦理事項、請領份數及使用目的，登記或變更需求亦須註明。",
+          "modes": [
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "其他法定代理人委任書、同意書",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_multiple_reps"
+              },
+              true
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa-overseas",
+          "form": "NA",
+          "kind": "ACTION",
+          "note": "在國外作成的委任書、授權書或同意書，應經我國駐外館處驗證。",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "先完成駐外館處驗證",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_document_region"
+              },
+              "OVERSEAS"
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "poa-mainland",
+          "form": "NA",
+          "kind": "ACTION",
+          "note": "在大陸地區、香港或澳門作成者，應經行政院設立或指定之機構或委託之民間團體（海基會）驗證。",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "APPLICANT",
+          "title": "先完成指定機構驗證",
+          "quantity": 1,
+          "condition": {
+            "==": [
+              {
+                "var": "q_document_region"
+              },
+              "CHINA_HK_MO"
+            ]
+          },
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        },
+        {
+          "key": "fee",
+          "form": "NA",
+          "kind": "FEE",
+          "note": "每張新臺幣 20 元；實際總額依請領張數計算。",
+          "unit": "張",
+          "modes": [
+            "SELF",
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "party": "FEE",
+          "title": "印鑑證明規費",
+          "quantity": 1,
+          "amountTwd": 20,
+          "sourceIds": [
+            "taipei-household-20261007"
+          ]
+        }
+      ],
+      "modes": [
+        {
+          "code": "SELF",
+          "label": "本人親辦",
+          "allowed": true
+        },
+        {
+          "code": "DELEGATE",
+          "label": "委託他人",
+          "allowed": true
+        },
+        {
+          "code": "LEGAL_REP",
+          "label": "法定代理人",
+          "allowed": true
+        }
+      ],
+      "title": "印鑑證明",
+      "agency": "臺北市各區戶政事務所",
+      "groups": [
+        {
+          "id": "self-identity",
+          "rule": "ONE_OF",
+          "label": "依身分情況備妥下列一種身分證明"
+        },
+        {
+          "id": "applicant-copy",
+          "rule": "ONE_OF",
+          "label": "當事人身分證明影本（擇一）"
+        }
+      ],
+      "parties": [
+        {
+          "code": "APPLICANT",
+          "label": "當事人要帶"
+        },
+        {
+          "code": "DELEGATE",
+          "label": "你（受委託人）要帶"
+        },
+        {
+          "code": "LEGAL_REP",
+          "label": "你（法定代理人）要帶"
+        },
+        {
+          "code": "FEE",
+          "label": "請備妥規費"
+        }
+      ],
+      "sources": [
+        {
+          "id": "taipei-household-20261007",
+          "url": "https://www-ws.gov.taipei/001/Upload/426/relfile/18393/8903/b6ef09df-e397-4ef6-b8b2-2dfcd26eaaa1.pdf",
+          "title": "臺北市政府申請案件處理時限表（戶政類）",
+          "clause": "項目 67；PDF 第 41–42 頁（印刷頁 40–41）",
+          "sha256": "d0e2a34c1d20eaa73c2756e9c6b7d0b40a4234d9d269dcee9489141fe0c39431",
+          "updatedAt": "2026-10-07",
+          "verifiedAt": "2026-11-07"
+        }
+      ],
+      "summary": "依親辦、委任或法定代理人身分，確認身分證明、印鑑章及委任文件。",
+      "category": "戶政",
+      "keywords": [
+        "印鑑",
+        "印章證明",
+        "印監證明",
+        "印鉴证明",
+        "印章",
+        "委託印鑑"
+      ],
+      "questions": [
+        {
+          "code": "q_no_current_id",
+          "type": "BOOLEAN",
+          "modes": [
+            "SELF"
+          ],
+          "prompt": "是否曾在國內設籍、現旅居國外／陸港澳，且未請領現行國民身分證？",
+          "helpText": "此情況可改驗有效中華民國護照、入國證明文件或其他身分證明文件。"
+        },
+        {
+          "code": "q_document_region",
+          "type": "ENUM",
+          "modes": [
+            "DELEGATE",
+            "LEGAL_REP"
+          ],
+          "prompt": "委任書、授權書或同意書在哪裡作成？",
+          "options": [
+            {
+              "label": "臺灣",
+              "value": "TW"
+            },
+            {
+              "label": "國外",
+              "value": "OVERSEAS"
+            },
+            {
+              "label": "大陸地區、香港或澳門",
+              "value": "CHINA_HK_MO"
+            }
+          ],
+          "helpText": "不確定時，清單會保留可能需要的驗證程序。"
+        },
+        {
+          "code": "q_multiple_reps",
+          "type": "BOOLEAN",
+          "modes": [
+            "LEGAL_REP"
+          ],
+          "prompt": "是否有數位法定代理人，而由其中一人代為申請？"
+        }
+      ],
+      "revisionId": "30ed0a60-c6c7-42d2-b0b7-3713c426d381",
+      "revisionNo": 1,
+      "verifiedAt": "2026-11-07",
+      "handlingUnit": "設籍臺北市者可至本市任一戶政事務所資料課；戶籍遷出國外且委任辦理者至最後戶籍地戶所；設籍外縣市者至戶籍地戶所。",
+      "processingTime": "臨櫃 1 小時；網路預約 2 日（仍須臨櫃）"
+    }
+  ]
+}

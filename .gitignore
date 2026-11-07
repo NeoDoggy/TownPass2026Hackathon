@@ -89,3 +89,16 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+# Widget Preview related
+.widget_preview/
+
+# Checklist development tools and generated output
+.tools/
+**/node_modules/
+checklist-web/dist/
+checklist-api/dist/
+**/test-results/
+**/playwright-report/
+**/.env
+**/.env.local
+checklist-api/data/raw/

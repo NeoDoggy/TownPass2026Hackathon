@@ -1,0 +1,160 @@
+{
+  "stats": {
+    "startTime": "2026-11-07T14:08:12.123Z",
+    "duration": 24121.704999999998,
+    "expected": 14,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "scans": [
+    {
+      "project": "chromium-mobile",
+      "state": "axe-home",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ],
+      "passes": 43
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-search",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ],
+      "passes": 43
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-questions-unknown",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-checklist-overseas",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-checklist-saved",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-legal-representative",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-home",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ],
+      "passes": 44
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-search",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ],
+      "passes": 44
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-questions-unknown",
+      "violations": [],
+      "incomplete": [],
+      "passes": 45
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-checklist-overseas",
+      "violations": [],
+      "incomplete": [],
+      "passes": 45
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-checklist-saved",
+      "violations": [],
+      "incomplete": [],
+      "passes": 45
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-legal-representative",
+      "violations": [],
+      "incomplete": [],
+      "passes": 45
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-empty",
+      "violations": [],
+      "incomplete": [],
+      "passes": 42
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-text-zoom-reflow",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-error",
+      "violations": [],
+      "incomplete": [],
+      "passes": 36
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-empty",
+      "violations": [],
+      "incomplete": [],
+      "passes": 43
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-text-zoom-reflow",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-error",
+      "violations": [],
+      "incomplete": [],
+      "passes": 36
+    },
+    {
+      "project": "chromium-mobile",
+      "state": "axe-storage-error",
+      "violations": [],
+      "incomplete": [],
+      "passes": 44
+    },
+    {
+      "project": "chromium-desktop",
+      "state": "axe-storage-error",
+      "violations": [],
+      "incomplete": [],
+      "passes": 45
+    }
+  ]
+}
