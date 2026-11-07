@@ -8,6 +8,12 @@ Open source is a key driver of technological progress and social development. Th
 
 # Getting Started
 
+## 辦事帶什麼 Checklist 微服務
+
+獨立 React + TypeScript + Vite Web App、Fastify API 與 PostgreSQL 匯入發布流程，從 TownPass「服務 → 城市生活」進入。
+
+請見 [啟動、資料匯入與 Flutter／HTTPS 設定](docs/checklist/README.md)、[Freego／無障礙人工驗證](docs/checklist/ACCESSIBILITY.md) 和 [本次測試結果與限制](docs/checklist/TEST-REPORT.md)。
+
 We highly recommend to read through our [document](https://tpe-guideline.web.app/en/docs/) for more detail.
 
 Here are some quick setup guide.

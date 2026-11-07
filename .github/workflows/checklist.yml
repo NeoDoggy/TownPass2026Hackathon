@@ -1,0 +1,49 @@
+name: Checklist
+on:
+  push:
+    paths:
+      [
+        "checklist-*/**",
+        "package*.json",
+        "playwright.config.ts",
+        "tsconfig.base.json",
+        ".github/workflows/checklist.yml",
+      ]
+  pull_request:
+    paths:
+      [
+        "checklist-*/**",
+        "package*.json",
+        "playwright.config.ts",
+        "tsconfig.base.json",
+        ".github/workflows/checklist.yml",
+      ]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          {
+            POSTGRES_USER: checklist,
+            POSTGRES_PASSWORD: ci-only,
+            POSTGRES_DB: checklist,
+          }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U checklist" --health-interval 5s --health-timeout 3s --health-retries 10
+    env:
+      DATABASE_URL: postgresql://checklist:ci-only@127.0.0.1:5432/checklist
+      CHECKLIST_TEST_DATABASE_URL: postgresql://checklist:ci-only@127.0.0.1:5432/checklist
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: npm ci
+      - run: npm run db:migrate && npm run db:migrate && npm run db:seed && npm run db:seed && npm run data:publish && npm run data:publish
+      - run: npm run build && npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:a11y
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: checklist-a11y-report, path: "playwright-report/" }

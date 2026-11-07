@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:town_pass/page/checklist/checklist_web_view.dart';
 import 'package:town_pass/page/account/account_view.dart';
 import 'package:town_pass/page/account/account_view_controller.dart';
 import 'package:town_pass/page/activity_detail/activity_detail_view.dart';
@@ -59,8 +60,10 @@ abstract class TPRoute {
   static const String subscription = '/subscription';
   static const String suspendAccount = '/suspend_account';
   static const String webView = '/web_view';
+  static const String checklist = '/checklist';
 
   static final List<GetPage> page = [
+    GetPage(name: checklist, page: () => const ChecklistWebView()),
     GetPage(
       name: main,
       page: () => const MainView(),

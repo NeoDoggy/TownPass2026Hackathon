@@ -1,0 +1,47 @@
+[
+  {
+    "id": "postal-account",
+    "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+    "title": "中華郵政：存簿儲金開戶及憑辦文件",
+    "clause": "一般個人戶；問題集「開戶金額」、「原留印鑑留存方式」",
+    "updatedAt": "2026-08-10",
+    "verifiedAt": "2026-11-07",
+    "sha256": "99a52a4622a213d745dda9d8c40b706a066215e1c4c5cf8964d2eb589e5fc01c"
+  },
+  {
+    "id": "postal-passbook",
+    "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+    "title": "中華郵政：儲金簿掛失補副、更換印鑑與密碼重設",
+    "clause": "問題集「我的儲金簿要掛失補發副本、更換印鑑或重新設定儲金簿密碼，該如何辦理？」",
+    "updatedAt": "2026-08-10",
+    "verifiedAt": "2026-11-07",
+    "sha256": "e3039442e66b81d5f3a2799dfc985ab0b45e53e42c1245d732094e40b380fd4e"
+  },
+  {
+    "id": "driving-license",
+    "url": "https://www.thb.gov.tw/cp.aspx?n=163",
+    "title": "交通部公路局：遺失與毀損補發",
+    "clause": "應備證件、規費、注意事項",
+    "updatedAt": "2025-10-29",
+    "verifiedAt": "2026-11-07",
+    "sha256": "856a5449e0f9a32b6339fae7e5e22d0a920cb46bb5a0cf3c0cb7041507185f98"
+  },
+  {
+    "id": "vehicle-registration",
+    "url": "https://www.thb.gov.tw/cp.aspx?n=437",
+    "title": "交通部公路局：行照遺失損壞換發",
+    "clause": "應備證件、收費、注意事項（個人車主）",
+    "updatedAt": "2026-10-22",
+    "verifiedAt": "2026-11-07",
+    "sha256": "ddd6e3a349837d552873d0bf36316faaf242f67bc5d0915509e1176b854019b8"
+  },
+  {
+    "id": "international-license",
+    "url": "https://www.thb.gov.tw/cp.aspx?n=96",
+    "title": "交通部公路局：申領國際駕照及辦理外國國際駕駛執照簽證",
+    "clause": "申領國際駕照應備證件、辦理地點、注意事項；不含外國國際駕照簽證",
+    "updatedAt": "2026-08-12",
+    "verifiedAt": "2026-11-07",
+    "sha256": "6f7bfc88e8acb2a18419d28c35a7805a42d6d9e384345c024f2d4cc9e6dcca52"
+  }
+]

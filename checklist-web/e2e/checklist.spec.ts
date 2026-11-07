@@ -1,0 +1,176 @@
+import { test, expect, type Page } from "@playwright/test";
+import AxeBuilder from "@axe-core/playwright";
+async function audit(page: Page, label: string) {
+  const result = await new AxeBuilder({ page })
+    .withTags([
+      "wcag2a",
+      "wcag2aa",
+      "wcag21a",
+      "wcag21aa",
+      "wcag22aa",
+      "best-practice",
+    ])
+    .analyze();
+  await test.info().attach(`axe-${label}`, {
+    body: JSON.stringify(
+      {
+        url: page.url(),
+        violations: result.violations,
+        incomplete: result.incomplete,
+        passes: result.passes.map((p) => p.id),
+      },
+      null,
+      2,
+    ),
+    contentType: "application/json",
+  });
+  expect(result.violations, `${label}: axe violations`).toEqual([]);
+}
+test("home, search, conditions and saved checklist are accessible", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (e) => errors.push(e.message));
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", { name: "申辦業務", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("目前提供 9 項業務")).toBeVisible();
+  await audit(page, "home");
+  await page.getByLabel("想辦什麼業務？").fill("印監證明");
+  await expect(page.getByText("找到 1 項業務")).toBeVisible();
+  await audit(page, "search");
+  await page.getByRole("link", { name: /印鑑證明.*查看準備清單/ }).click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: "印鑑證明" }),
+  ).toBeFocused();
+  await page.getByRole("radio", { name: "委託他人", exact: true }).check();
+  await audit(page, "questions-unknown");
+  const conditions = page.getByRole("group", {
+    name: "委任書、授權書或同意書在哪裡作成？",
+  });
+  await conditions.getByRole("radio", { name: "國外", exact: true }).check();
+  await expect(
+    page.getByRole("status").filter({ hasText: "已依所選條件更新清單" }),
+  ).toContainText("已確認必備：先完成駐外館處驗證");
+  await expect(
+    page.getByText("先完成駐外館處驗證", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("先完成指定機構驗證", { exact: true }),
+  ).toHaveCount(0);
+  await audit(page, "checklist-overseas");
+  await page.getByRole("checkbox", { name: "受委任人身分證明文件" }).check();
+  await page.reload();
+  await expect(
+    page.getByRole("radio", { name: "委託他人", exact: true }),
+  ).toBeChecked();
+  await expect(
+    page.getByRole("checkbox", { name: "受委任人身分證明文件" }),
+  ).toBeChecked();
+  await expect(
+    page.getByRole("radio", { name: "國外", exact: true }),
+  ).toBeChecked();
+  await expect(page).toHaveURL(/\/services\/seal-certificate$/);
+  await audit(page, "checklist-saved");
+  await page.getByRole("radio", { name: "法定代理人", exact: true }).check();
+  await audit(page, "legal-representative");
+  expect(errors).toEqual([]);
+});
+test("keyboard, empty/error states, zoom reflow and offline cache", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "跳到主要內容" })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(page.locator("#main")).toBeFocused();
+  await page.getByLabel("想辦什麼業務？").fill("不存在業務");
+  await expect(
+    page.getByRole("heading", { name: "還沒找到想辦的業務？" }),
+  ).toBeVisible();
+  await audit(page, "empty");
+  await page.goto("/services/seal-certificate");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "印鑑證明" }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.addStyleTag({ content: "html{font-size:225% !important}" });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await audit(page, "text-zoom-reflow");
+  await page.route("**/v1/**", (route) => route.abort());
+  await page.reload();
+  await expect(page.getByText(/目前無法連線，顯示本機保留版本/)).toBeVisible();
+  await page.getByRole("checkbox", { name: "原登記之印鑑章" }).check();
+  await page.goto("/services/not-found");
+  await expect(
+    page.getByRole("heading", { name: "無法載入業務" }),
+  ).toBeVisible();
+  await audit(page, "error");
+});
+test("revision updates preserve stable checks and storage failures are announced", async ({
+  page,
+}) => {
+  await page.goto("/services/seal-certificate");
+  await expect(
+    page.getByRole("heading", { level: 1, name: "印鑑證明" }),
+  ).toBeVisible();
+  await page.getByRole("checkbox", { name: "原登記之印鑑章" }).check();
+  await page.evaluate(() => {
+    const key = "townpass-checklist:seal-certificate:SELF";
+    const saved = JSON.parse(localStorage.getItem(key)!);
+    saved.revisionNo = 0;
+    saved.itemKeys = ["seal", "removed-item"];
+    localStorage.setItem(key, JSON.stringify(saved));
+  });
+  await page.reload();
+  await expect(page.getByText(/規定已更新至第 1 版/)).toBeVisible();
+  await expect(
+    page.getByRole("checkbox", { name: "原登記之印鑑章" }),
+  ).toBeChecked();
+  await page.evaluate(() => {
+    Storage.prototype.setItem = () => {
+      throw new DOMException("Storage disabled", "QuotaExceededError");
+    };
+  });
+  await page.getByRole("checkbox", { name: "原登記之印鑑章" }).uncheck();
+  await expect(page.getByRole("alert")).toContainText("瀏覽器無法保存資料");
+  await audit(page, "storage-error");
+});
+test("browser back returns to search; condition changes and clearing work", async ({
+  page,
+}) => {
+  await page.goto("/");
+  await page.getByText("目前提供 9 項業務").waitFor();
+  await page
+    .getByRole("link", { name: /中、英文結離婚證明書.*查看準備清單/ })
+    .click();
+  const english = page.getByRole("group", { name: "是否申請英文證明書？" });
+  await english.getByRole("radio", { name: "是", exact: true }).check();
+  await expect(
+    page.getByRole("checkbox", { name: "當事人中華民國護照" }),
+  ).toBeVisible();
+  await english.getByRole("radio", { name: "否", exact: true }).check();
+  await expect(
+    page.getByRole("checkbox", { name: "當事人中華民國護照" }),
+  ).toHaveCount(0);
+  await page.getByRole("checkbox", { name: "當事人國民身分證" }).focus();
+  await page.keyboard.press("Space");
+  await expect(
+    page.getByRole("checkbox", { name: "當事人國民身分證" }),
+  ).toBeChecked();
+  await page
+    .getByRole("button", { name: "清除本辦理方式的勾選與條件" })
+    .click();
+  await expect(
+    page.getByRole("checkbox", { name: "當事人國民身分證" }),
+  ).not.toBeChecked();
+  await page.goBack();
+  await expect(
+    page.getByRole("heading", { name: "辦事帶什麼", exact: true }),
+  ).toBeFocused();
+});

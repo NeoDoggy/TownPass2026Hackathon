@@ -1,0 +1,277 @@
+openapi: 3.1.0
+info:
+  title: TownPass 辦事帶什麼 API
+  version: 0.1.0
+  description: 公開讀取已發布快照。條件答案只接受 POST body；不記錄搜尋詞、條件答案或完整請求網址。
+servers:
+  - url: /
+paths:
+  /health:
+    get:
+      responses:
+        "200": { description: 查詢服務與目前快照可用，不依賴資料庫 }
+  /v1/services:
+    get:
+      parameters:
+        - { name: category, in: query, schema: { type: string, maxLength: 30 } }
+        - {
+            name: page,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 1000 },
+          }
+        - {
+            name: size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50 },
+          }
+      responses:
+        "200": { $ref: "#/components/responses/Search" }
+        "400": { $ref: "#/components/responses/Problem" }
+  /v1/suggest:
+    get:
+      parameters:
+        - {
+            name: q,
+            in: query,
+            required: true,
+            schema: { type: string, minLength: 1, maxLength: 30 },
+          }
+        - {
+            name: limit,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 10, default: 8 },
+          }
+      responses:
+        "200": { $ref: "#/components/responses/Search" }
+        "400": { $ref: "#/components/responses/Problem" }
+  /v1/search:
+    get:
+      parameters:
+        - { name: q, in: query, schema: { type: string, maxLength: 30 } }
+        - { name: category, in: query, schema: { type: string, maxLength: 30 } }
+        - {
+            name: page,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 1000 },
+          }
+        - {
+            name: size,
+            in: query,
+            schema: { type: integer, minimum: 1, maximum: 50 },
+          }
+      responses:
+        "200": { $ref: "#/components/responses/Search" }
+        "400": { $ref: "#/components/responses/Problem" }
+    post:
+      description: Web App 使用此端點，避免搜尋文字進入 URL。Cache-Control 為 no-store。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [q]
+              properties: { q: { type: string, minLength: 1, maxLength: 30 } }
+      responses:
+        "200": { $ref: "#/components/responses/Search" }
+        "400": { $ref: "#/components/responses/Problem" }
+  /v1/categories:
+    get:
+      responses:
+        "200":
+          description: 類別與已上架業務數
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [name, count]
+                      properties:
+                        { name: { type: string }, count: { type: integer } }
+  /v1/services/{slug}:
+    parameters: [{ $ref: "#/components/parameters/Slug" }]
+    get:
+      responses:
+        "200":
+          description: 完整已發布業務定義；ETag 與 X-Snapshot-Version；可供本機即時重算
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [snapshotVersion, service]
+                properties:
+                  snapshotVersion: { type: string }
+                  service: { $ref: "#/components/schemas/Service" }
+        "304": { description: ETag 未變更 }
+        "404": { $ref: "#/components/responses/Problem" }
+        "410": { $ref: "#/components/responses/Problem" }
+  /v1/services/{slug}/checklist:
+    parameters: [{ $ref: "#/components/parameters/Slug" }]
+    get:
+      description: 不帶條件答案的預設清單。未知條件保留為 CONDITIONAL。拒絕 a.* 等額外參數。
+      parameters:
+        - {
+            name: mode,
+            in: query,
+            required: true,
+            schema: { $ref: "#/components/schemas/ModeCode" },
+          }
+      responses:
+        "200": { $ref: "#/components/responses/Checklist" }
+        "304": { description: ETag 未變更 }
+        "400": { $ref: "#/components/responses/Problem" }
+        "404": { $ref: "#/components/responses/Problem" }
+        "410": { $ref: "#/components/responses/Problem" }
+        "422": { $ref: "#/components/responses/Problem" }
+    post:
+      description: 以 body 作答。Cache-Control 為 no-store，回應與共用 resolve() 相同。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [mode, answers]
+              properties:
+                mode: { $ref: "#/components/schemas/ModeCode" }
+                answers:
+                  type: object
+                  maxProperties: 30
+                  additionalProperties: { type: [boolean, string] }
+      responses:
+        "200": { $ref: "#/components/responses/Checklist" }
+        "400": { $ref: "#/components/responses/Problem" }
+        "404": { $ref: "#/components/responses/Problem" }
+        "410": { $ref: "#/components/responses/Problem" }
+        "422": { $ref: "#/components/responses/Problem" }
+components:
+  parameters:
+    Slug:
+      {
+        name: slug,
+        in: path,
+        required: true,
+        schema:
+          {
+            type: string,
+            maxLength: 80,
+            pattern: "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          },
+      }
+  responses:
+    Problem:
+      description: RFC 9457 錯誤；另可能回應 403（Origin）、413（body 上限）、429（限流）及 500
+      content:
+        application/problem+json:
+          schema:
+            type: object
+            required: [type, title, status]
+            properties:
+              {
+                type: { type: string },
+                title: { type: string },
+                status: { type: integer },
+              }
+    Search:
+      description: 搜尋結果；GET 帶 ETag、X-Snapshot-Version，可快取 60 秒
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [snapshotVersion, total, items]
+            properties:
+              snapshotVersion: { type: string }
+              total: { type: integer }
+              items:
+                type: array
+                items:
+                  type: object
+                  required:
+                    [slug, title, agency, category, summary, matched, score]
+                  properties:
+                    slug: { type: string }
+                    title: { type: string }
+                    agency: { type: string }
+                    category: { type: string }
+                    summary: { type: string }
+                    matched: { type: string }
+                    score: { type: number }
+    Checklist:
+      description: 組裝清單；不允許方式以 200 + eligibility FALSE 說明原因
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [snapshotVersion, checklist]
+            properties:
+              snapshotVersion: { type: string }
+              checklist:
+                type: object
+                required:
+                  [
+                    mode,
+                    eligibility,
+                    answers,
+                    questions,
+                    pendingQuestions,
+                    sections,
+                  ]
+                properties:
+                  mode: { type: object }
+                  eligibility: { enum: ["TRUE", "FALSE", "UNKNOWN"] }
+                  answers: { type: object }
+                  questions: { type: array, items: { type: object } }
+                  pendingQuestions: { type: array, items: { type: string } }
+                  sections:
+                    type: array
+                    items:
+                      type: object
+                      required: [party, label, entries]
+                      properties:
+                        party: { type: string }
+                        label: { type: string }
+                        entries:
+                          {
+                            type: array,
+                            items:
+                              {
+                                type: object,
+                                description: "ResolvedItem 或 ResolvedGroup；完整型別見 checklist-shared/src/index.ts",
+                              },
+                          }
+  schemas:
+    ModeCode: { type: string, enum: [SELF, DELEGATE, LEGAL_REP] }
+    Service:
+      type: object
+      required:
+        [
+          slug,
+          title,
+          revisionNo,
+          revisionId,
+          verifiedAt,
+          modes,
+          parties,
+          questions,
+          items,
+          groups,
+          sources,
+        ]
+      properties:
+        slug: { type: string }
+        title: { type: string }
+        revisionNo: { type: integer }
+        revisionId: { type: string, format: uuid }
+        verifiedAt: { type: string, format: date }
+        modes: { type: array, items: { type: object } }
+        parties: { type: array, items: { type: object } }
+        questions: { type: array, items: { type: object } }
+        items: { type: array, items: { type: object } }
+        groups: { type: array, items: { type: object } }
+        sources: { type: array, items: { type: object } }

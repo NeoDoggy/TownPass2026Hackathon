@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: checklist
+      POSTGRES_USER: checklist
+      POSTGRES_PASSWORD: ${CHECKLIST_DB_PASSWORD:?Set CHECKLIST_DB_PASSWORD}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["checklist-db:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U checklist -d checklist"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+  api:
+    build:
+      context: .
+      dockerfile: deploy/checklist.Dockerfile
+    environment:
+      CORS_ORIGINS: https://${CHECKLIST_DOMAIN:-localhost}
+    volumes:
+      ["./checklist-api/data/snapshots:/app/checklist-api/data/snapshots:ro"]
+    # Query reads published snapshots only; it has no DB credentials or DB dependency.
+  web:
+    build:
+      context: .
+      dockerfile: deploy/web.Dockerfile
+    environment:
+      CHECKLIST_DOMAIN: ${CHECKLIST_DOMAIN:-localhost}
+    ports: ["80:80", "443:443", "443:443/udp"]
+    volumes: ["checklist-tls:/data", "checklist-caddy:/config"]
+    depends_on: [api]
+volumes:
+  checklist-db:
+  checklist-tls:
+  checklist-caddy:

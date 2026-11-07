@@ -1,0 +1,2114 @@
+[
+  {
+    "agency": "臺北市各區戶政事務所",
+    "category": "戶政",
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "processingTime": "臨櫃 1 小時；網路預約 2 日（仍須臨櫃）",
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "LEGAL_REP",
+        "label": "你（法定代理人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥規費"
+      }
+    ],
+    "groups": [
+      {
+        "id": "self-identity",
+        "label": "依身分情況備妥下列一種身分證明",
+        "rule": "ONE_OF"
+      },
+      {
+        "id": "applicant-copy",
+        "label": "當事人身分證明影本（擇一）",
+        "rule": "ONE_OF"
+      }
+    ],
+    "sources": [
+      {
+        "id": "taipei-household-20261007",
+        "title": "臺北市政府申請案件處理時限表（戶政類）",
+        "url": "https://www-ws.gov.taipei/001/Upload/426/relfile/18393/8903/b6ef09df-e397-4ef6-b8b2-2dfcd26eaaa1.pdf",
+        "clause": "項目 67；PDF 第 41–42 頁（印刷頁 40–41）",
+        "updatedAt": "2026-10-07",
+        "verifiedAt": "2026-11-07",
+        "sha256": "d0e2a34c1d20eaa73c2756e9c6b7d0b40a4234d9d269dcee9489141fe0c39431"
+      }
+    ],
+    "slug": "seal-certificate",
+    "title": "印鑑證明",
+    "summary": "依親辦、委任或法定代理人身分，確認身分證明、印鑑章及委任文件。",
+    "keywords": [
+      "印鑑",
+      "印章證明",
+      "印監證明",
+      "印鉴证明",
+      "印章",
+      "委託印鑑"
+    ],
+    "handlingUnit": "設籍臺北市者可至本市任一戶政事務所資料課；戶籍遷出國外且委任辦理者至最後戶籍地戶所；設籍外縣市者至戶籍地戶所。",
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      },
+      {
+        "code": "DELEGATE",
+        "label": "委託他人",
+        "allowed": true
+      },
+      {
+        "code": "LEGAL_REP",
+        "label": "法定代理人",
+        "allowed": true
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_no_current_id",
+        "type": "BOOLEAN",
+        "prompt": "是否曾在國內設籍、現旅居國外／陸港澳，且未請領現行國民身分證？",
+        "modes": [
+          "SELF"
+        ],
+        "helpText": "此情況可改驗有效中華民國護照、入國證明文件或其他身分證明文件。"
+      },
+      {
+        "code": "q_document_region",
+        "prompt": "委任書、授權書或同意書在哪裡作成？",
+        "type": "ENUM",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "options": [
+          {
+            "value": "TW",
+            "label": "臺灣"
+          },
+          {
+            "value": "OVERSEAS",
+            "label": "國外"
+          },
+          {
+            "value": "CHINA_HK_MO",
+            "label": "大陸地區、香港或澳門"
+          }
+        ],
+        "helpText": "不確定時，清單會保留可能需要的驗證程序。"
+      },
+      {
+        "code": "q_multiple_reps",
+        "type": "BOOLEAN",
+        "prompt": "是否有數位法定代理人，而由其中一人代為申請？",
+        "modes": [
+          "LEGAL_REP"
+        ]
+      }
+    ],
+    "items": [
+      {
+        "key": "self-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "documentCode": "national-id",
+        "groupId": "self-identity",
+        "condition": {
+          "==": [
+            {
+              "var": "q_no_current_id"
+            },
+            false
+          ]
+        }
+      },
+      {
+        "key": "self-passport",
+        "title": "有效中華民國護照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "self-identity",
+        "condition": {
+          "==": [
+            {
+              "var": "q_no_current_id"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "self-entry",
+        "title": "入國證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "self-identity",
+        "condition": {
+          "==": [
+            {
+              "var": "q_no_current_id"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "self-other",
+        "title": "其他身分證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "self-identity",
+        "condition": {
+          "==": [
+            {
+              "var": "q_no_current_id"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "seal",
+        "title": "原登記之印鑑章",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "documentCode": "registered-seal"
+      },
+      {
+        "key": "delegate-id",
+        "title": "受委任人身分證明文件",
+        "kind": "DOCUMENT",
+        "party": "DELEGATE",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ]
+      },
+      {
+        "key": "representative-id",
+        "title": "法定代理人身分證明文件",
+        "kind": "DOCUMENT",
+        "party": "LEGAL_REP",
+        "modes": [
+          "LEGAL_REP"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ]
+      },
+      {
+        "key": "applicant-copy-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "applicant-copy"
+      },
+      {
+        "key": "applicant-copy-passport",
+        "title": "有效中華民國護照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "applicant-copy"
+      },
+      {
+        "key": "applicant-copy-entry",
+        "title": "入國證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "applicant-copy"
+      },
+      {
+        "key": "applicant-copy-other",
+        "title": "其他身分證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "groupId": "applicant-copy"
+      },
+      {
+        "key": "poa",
+        "title": "委任書或授權書",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "note": "須由委任人親自簽名或蓋章，註明辦理事項、請領份數及使用目的。如需同時辦理印鑑登記或變更，請另洽戶所確認。"
+      },
+      {
+        "key": "other-reps-id",
+        "title": "其他法定代理人身分證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "LEGAL_REP"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_multiple_reps"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "other-reps-poa",
+        "title": "其他法定代理人委任書、同意書",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "LEGAL_REP"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_multiple_reps"
+            },
+            true
+          ]
+        },
+        "note": "依來源第 3(4) 點附繳委任書及同意書；註明辦理事項、請領份數及使用目的，登記或變更需求亦須註明。"
+      },
+      {
+        "key": "poa-overseas",
+        "title": "先完成駐外館處驗證",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_document_region"
+            },
+            "OVERSEAS"
+          ]
+        },
+        "note": "在國外作成的委任書、授權書或同意書，應經我國駐外館處驗證。"
+      },
+      {
+        "key": "poa-mainland",
+        "title": "先完成指定機構驗證",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_document_region"
+            },
+            "CHINA_HK_MO"
+          ]
+        },
+        "note": "在大陸地區、香港或澳門作成者，應經行政院設立或指定之機構或委託之民間團體（海基會）驗證。"
+      },
+      {
+        "key": "fee",
+        "title": "印鑑證明規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF",
+          "DELEGATE",
+          "LEGAL_REP"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "amountTwd": 20,
+        "unit": "張",
+        "note": "每張新臺幣 20 元；實際總額依請領張數計算。"
+      }
+    ]
+  },
+  {
+    "agency": "臺北市各區戶政事務所",
+    "category": "戶政",
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "processingTime": "臨櫃 1 小時；網路預約 2 日（仍須臨櫃）",
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "LEGAL_REP",
+        "label": "你（法定代理人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥規費"
+      }
+    ],
+    "groups": [
+      {
+        "id": "english-name",
+        "label": "英文姓名證明（擇一）",
+        "rule": "ONE_OF"
+      }
+    ],
+    "sources": [
+      {
+        "id": "taipei-household-20261007",
+        "title": "臺北市政府申請案件處理時限表（戶政類）",
+        "url": "https://www-ws.gov.taipei/001/Upload/426/relfile/18393/8903/b6ef09df-e397-4ef6-b8b2-2dfcd26eaaa1.pdf",
+        "clause": "項目 73；PDF 第 43 頁（印刷頁 42）",
+        "updatedAt": "2026-10-07",
+        "verifiedAt": "2026-11-07",
+        "sha256": "d0e2a34c1d20eaa73c2756e9c6b7d0b40a4234d9d269dcee9489141fe0c39431"
+      }
+    ],
+    "slug": "marriage-divorce-certificate",
+    "title": "中、英文結離婚證明書",
+    "summary": "申請結婚或離婚證明書，確認委託文件、英文姓名證明及境外文件驗證。",
+    "keywords": [
+      "結婚證明",
+      "離婚證明",
+      "英文結婚證明",
+      "結離婚證明書",
+      "婚姻證明",
+      "结婚证明"
+    ],
+    "handlingUnit": "任一戶政事務所登記課。",
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      },
+      {
+        "code": "DELEGATE",
+        "label": "委託他人",
+        "allowed": true
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_english",
+        "prompt": "是否申請英文證明書？",
+        "type": "BOOLEAN"
+      },
+      {
+        "code": "q_document_region",
+        "prompt": "應備證件在哪裡作成？",
+        "type": "ENUM",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "options": [
+          {
+            "value": "TW",
+            "label": "臺灣"
+          },
+          {
+            "value": "OVERSEAS",
+            "label": "國外"
+          },
+          {
+            "value": "CHINA_HK_MO",
+            "label": "大陸地區、香港或澳門"
+          }
+        ],
+        "helpText": "不確定時，清單會保留可能需要的驗證程序。"
+      },
+      {
+        "code": "q_foreign_language",
+        "prompt": "應備證件是否為外文？",
+        "type": "BOOLEAN"
+      }
+    ],
+    "items": [
+      {
+        "key": "applicant-id",
+        "title": "當事人國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "applicant-sign",
+        "title": "當事人印章或簽名",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "note": "可於現場簽名，不必為此另備印章。"
+      },
+      {
+        "key": "delegate-id",
+        "title": "受委託人國民身分證",
+        "kind": "DOCUMENT",
+        "party": "DELEGATE",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "delegate-sign",
+        "title": "受委託人印章或簽名",
+        "kind": "DOCUMENT",
+        "party": "DELEGATE",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ]
+      },
+      {
+        "key": "poa",
+        "title": "委託書",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ]
+      },
+      {
+        "key": "passport",
+        "title": "當事人中華民國護照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_english"
+            },
+            true
+          ]
+        },
+        "groupId": "english-name"
+      },
+      {
+        "key": "english-name-proof",
+        "title": "載有英文姓名的證明文件",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_english"
+            },
+            true
+          ]
+        },
+        "groupId": "english-name"
+      },
+      {
+        "key": "poa-overseas",
+        "title": "先完成駐外館處驗證",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_document_region"
+            },
+            "OVERSEAS"
+          ]
+        },
+        "note": "在國外作成的應備證件，應經我國駐外館處驗證。"
+      },
+      {
+        "key": "poa-mainland",
+        "title": "先完成指定機構驗證",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_document_region"
+            },
+            "CHINA_HK_MO"
+          ]
+        },
+        "note": "在大陸地區、香港或澳門作成者，應經行政院設立或指定之機構或委託之民間團體（海基會）驗證。"
+      },
+      {
+        "key": "translation",
+        "title": "經驗證或認證的中文譯本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_foreign_language"
+            },
+            true
+          ]
+        },
+        "note": "應備證件為外文者，另檢附經駐外館處驗證或國內公證人認證之中文譯本。"
+      },
+      {
+        "key": "fee",
+        "title": "結離婚證明書規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "taipei-household-20261007"
+        ],
+        "amountTwd": 100,
+        "unit": "份",
+        "note": "每份新臺幣 100 元。"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "postal-account",
+        "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+        "title": "中華郵政：存簿儲金開戶及憑辦文件",
+        "clause": "一般個人戶；問題集「開戶金額」、「原留印鑑留存方式」",
+        "updatedAt": "2026-08-10",
+        "verifiedAt": "2026-11-07",
+        "sha256": "99a52a4622a213d745dda9d8c40b706a066215e1c4c5cf8964d2eb589e5fc01c"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_name_changed",
+        "prompt": "是否曾更改姓名？",
+        "type": "BOOLEAN"
+      }
+    ],
+    "groups": [
+      {
+        "id": "second-id",
+        "label": "第二身分證明文件",
+        "rule": "ONE_OF"
+      },
+      {
+        "id": "name-change",
+        "label": "載有詳細記事的更名證明",
+        "rule": "ONE_OF"
+      }
+    ],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "中華郵政股份有限公司",
+    "category": "郵局儲匯",
+    "handlingUnit": "洽提供儲匯服務的郵局辦理。本清單適用持國民身分證的一般成年個人戶親辦；未成年、受監護或輔助宣告、歸化改號、外籍及團體戶，請先洽郵局確認專用文件。",
+    "slug": "postal-savings-account",
+    "title": "郵局存簿儲金開戶（成年人）",
+    "summary": "一般成年國民親自開戶，準備雙證件、印鑑與開戶存款；更名者另備詳細記事文件。",
+    "keywords": [
+      "郵局開戶",
+      "郵局开户",
+      "郵政開戶",
+      "存摺開戶",
+      "儲蓄帳戶",
+      "存簿儲金"
+    ],
+    "items": [
+      {
+        "key": "applicant-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "second-health",
+        "title": "健保卡",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "second-id",
+        "note": "須載有開戶人姓名，足以證明為本人。"
+      },
+      {
+        "key": "second-license",
+        "title": "駕照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "second-id",
+        "note": "須載有開戶人姓名，足以證明為本人。"
+      },
+      {
+        "key": "second-passport",
+        "title": "護照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "second-id",
+        "note": "須載有開戶人姓名，足以證明為本人。"
+      },
+      {
+        "key": "second-household",
+        "title": "戶口名簿",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "second-id",
+        "note": "須載有開戶人姓名，足以證明為本人。"
+      },
+      {
+        "key": "second-transcript",
+        "title": "戶籍謄本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "second-id",
+        "note": "須載有開戶人姓名，足以證明為本人。"
+      },
+      {
+        "key": "seal",
+        "title": "開戶印鑑（印章或本人親簽）",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "note": "以戶名留存印鑑；採簽名者須當面親自簽名。印章不可使用易變質或磨損的橡皮章、原子章。"
+      },
+      {
+        "key": "name-household",
+        "title": "具詳細記事的新式戶口名簿",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "name-change",
+        "condition": {
+          "==": [
+            {
+              "var": "q_name_changed"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "name-transcript",
+        "title": "具詳細記事的戶籍謄本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "groupId": "name-change",
+        "condition": {
+          "==": [
+            {
+              "var": "q_name_changed"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "opening-deposit",
+        "title": "準備至少新臺幣 10 元開戶存款",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-account"
+        ],
+        "note": "這是存入帳戶的款項。"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "postal-passbook",
+        "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+        "title": "中華郵政：儲金簿掛失補副、更換印鑑與密碼重設",
+        "clause": "問題集「我的儲金簿要掛失補發副本、更換印鑑或重新設定儲金簿密碼，該如何辦理？」",
+        "updatedAt": "2026-08-10",
+        "verifiedAt": "2026-11-07",
+        "sha256": "e3039442e66b81d5f3a2799dfc985ab0b45e53e42c1245d732094e40b380fd4e"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      }
+    ],
+    "questions": [],
+    "groups": [],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "中華郵政股份有限公司",
+    "category": "郵局儲匯",
+    "handlingUnit": "本人至任一提供儲匯服務的郵局辦理；非通儲戶須至立帳郵局。本清單適用持國民身分證的一般成年個人戶；其他身分請先洽郵局。",
+    "slug": "postal-passbook-replacement",
+    "title": "郵局存摺掛失補發",
+    "summary": "一般成年個人戶本人辦理儲金簿掛失補副，準備身分證、原留印鑑與工本費。",
+    "keywords": [
+      "存摺遺失",
+      "存折丢失",
+      "郵局存摺補發",
+      "儲金簿掛失",
+      "掛失補副"
+    ],
+    "items": [
+      {
+        "key": "applicant-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "seal",
+        "title": "原留印鑑",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ]
+      },
+      {
+        "key": "stop-payment",
+        "title": "遺失後儘速向郵局要求暫予止付",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "note": "可先向郵局口頭或電話通知，再由本人臨櫃掛失補副。顧客服務專線 0800-700-365。"
+      },
+      {
+        "key": "fee",
+        "title": "儲金簿掛失補副工本費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "amountTwd": 50,
+        "unit": "件"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "postal-passbook",
+        "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+        "title": "中華郵政：儲金簿掛失補副、更換印鑑與密碼重設",
+        "clause": "問題集「我的儲金簿要掛失補發副本、更換印鑑或重新設定儲金簿密碼，該如何辦理？」",
+        "updatedAt": "2026-08-10",
+        "verifiedAt": "2026-11-07",
+        "sha256": "e3039442e66b81d5f3a2799dfc985ab0b45e53e42c1245d732094e40b380fd4e"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      }
+    ],
+    "questions": [],
+    "groups": [],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "中華郵政股份有限公司",
+    "category": "郵局儲匯",
+    "handlingUnit": "本人至任一提供儲匯服務的郵局辦理；非通儲戶須至立帳郵局。本清單適用持國民身分證的一般成年個人戶；其他身分請先洽郵局。",
+    "slug": "postal-seal-change",
+    "title": "郵局存簿更換印鑑",
+    "summary": "一般成年個人戶本人變更存簿印鑑，準備身分證、儲金簿及新印鑑。",
+    "keywords": [
+      "郵局印章遺失",
+      "郵局換印章",
+      "郵局更印",
+      "變更印鑑",
+      "更換印鑑"
+    ],
+    "items": [
+      {
+        "key": "applicant-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "passbook",
+        "title": "儲金簿（存摺）",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ]
+      },
+      {
+        "key": "new-seal",
+        "title": "新印鑑",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "note": "樣式不得與原留印鑑雷同，且不得使用易變質或磨損的橡皮章等印材。"
+      },
+      {
+        "key": "fee",
+        "title": "更換印鑑工本費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "amountTwd": 50,
+        "unit": "件"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "postal-passbook",
+        "url": "https://www.post.gov.tw/post/internet/B_saving/index.jsp?ID=3010102",
+        "title": "中華郵政：儲金簿掛失補副、更換印鑑與密碼重設",
+        "clause": "問題集「我的儲金簿要掛失補發副本、更換印鑑或重新設定儲金簿密碼，該如何辦理？」",
+        "updatedAt": "2026-08-10",
+        "verifiedAt": "2026-11-07",
+        "sha256": "e3039442e66b81d5f3a2799dfc985ab0b45e53e42c1245d732094e40b380fd4e"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      }
+    ],
+    "questions": [],
+    "groups": [],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "中華郵政股份有限公司",
+    "category": "郵局儲匯",
+    "handlingUnit": "本人至任一提供儲匯服務的郵局辦理；非通儲戶須至立帳郵局。本清單適用持國民身分證的一般成年個人戶；其他身分請先洽郵局。",
+    "slug": "postal-passbook-password-reset",
+    "title": "郵局儲金簿密碼重設",
+    "summary": "一般成年個人戶忘記儲金簿密碼時，由本人攜帶身分證、原留印鑑及儲金簿辦理。",
+    "keywords": [
+      "郵局密碼忘記",
+      "存摺密碼",
+      "儲金簿密碼",
+      "郵局密碼重設",
+      "存簿密碼"
+    ],
+    "items": [
+      {
+        "key": "applicant-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "seal",
+        "title": "原留印鑑",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ]
+      },
+      {
+        "key": "passbook",
+        "title": "儲金簿（存摺）",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "postal-passbook"
+        ],
+        "note": "本項為儲金簿密碼；金融卡、網路郵局及行動郵局密碼請另洽郵局。"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "driving-license",
+        "url": "https://www.thb.gov.tw/cp.aspx?n=163",
+        "title": "交通部公路局：遺失與毀損補發",
+        "clause": "應備證件、規費、注意事項",
+        "updatedAt": "2025-10-29",
+        "verifiedAt": "2026-11-07",
+        "sha256": "856a5449e0f9a32b6339fae7e5e22d0a920cb46bb5a0cf3c0cb7041507185f98"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      },
+      {
+        "code": "DELEGATE",
+        "label": "委託他人",
+        "allowed": true
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_damaged",
+        "prompt": "是否因駕照毀損而換發（仍持有舊駕照）？",
+        "type": "BOOLEAN"
+      },
+      {
+        "code": "q_professional_review",
+        "prompt": "是否為已屆審驗日期的職業駕照？",
+        "type": "BOOLEAN"
+      }
+    ],
+    "groups": [
+      {
+        "id": "identity",
+        "label": "申請人身分證明",
+        "rule": "ONE_OF"
+      }
+    ],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "交通部公路局各區監理所（站）",
+    "category": "監理",
+    "handlingUnit": "各區監理所（站）；部分站、分站未提供全部服務，出發前請電洽確認。",
+    "slug": "driving-license-replacement",
+    "title": "汽機車駕照遺失／毀損補發",
+    "summary": "依親辦或代辦確認身分證件、近兩年照片、毀損駕照與職業駕照審驗需求。",
+    "keywords": [
+      "駕照補發",
+      "驾照补办",
+      "駕照遺失",
+      "駕照換發",
+      "駕照毀損",
+      "機車駕照",
+      "汽車駕照"
+    ],
+    "items": [
+      {
+        "key": "self-id",
+        "title": "國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "self-military",
+        "title": "軍人身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "self-residence",
+        "title": "僑民居留證明",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "applicant-id",
+        "title": "申請人國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "delegate-id",
+        "title": "代辦人國民身分證",
+        "kind": "DOCUMENT",
+        "party": "DELEGATE",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "photos",
+        "title": "近兩年 1 吋彩色照片",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 2,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "note": "光面、素色背景、脫帽、五官清晰且露耳的正面半身照片，不得使用合成照片。"
+      },
+      {
+        "key": "damaged-license",
+        "title": "毀損的駕駛執照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_damaged"
+            },
+            true
+          ]
+        },
+        "note": "遺失者免附。"
+      },
+      {
+        "key": "review-form",
+        "title": "汽（機）車駕駛人審驗暨各項異動登記書",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_professional_review"
+            },
+            true
+          ]
+        },
+        "note": "僅針對職業駕照審驗用。"
+      },
+      {
+        "key": "review",
+        "title": "同時辦理職業駕照審驗",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_professional_review"
+            },
+            true
+          ]
+        },
+        "note": "審驗所需額外文件請先洽監理所（站）確認。"
+      },
+      {
+        "key": "violations",
+        "title": "確認違規案件已結清或完成分期首期繳款",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "note": "有未結清違規案件者，須先結清，或辦理分期並繳納第一期罰鍰後才能補照。"
+      },
+      {
+        "key": "fee",
+        "title": "駕照補發規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "driving-license"
+        ],
+        "amountTwd": 200,
+        "unit": "張"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "international-license",
+        "url": "https://www.thb.gov.tw/cp.aspx?n=96",
+        "title": "交通部公路局：申領國際駕照及辦理外國國際駕駛執照簽證",
+        "clause": "申領國際駕照應備證件、辦理地點、注意事項；不含外國國際駕照簽證",
+        "updatedAt": "2026-08-12",
+        "verifiedAt": "2026-11-07",
+        "sha256": "6f7bfc88e8acb2a18419d28c35a7805a42d6d9e384345c024f2d4cc9e6dcca52"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true
+      },
+      {
+        "code": "DELEGATE",
+        "label": "委託他人",
+        "allowed": true
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_address_differs",
+        "prompt": "駕照地址是否與身分證不同？",
+        "type": "BOOLEAN"
+      }
+    ],
+    "groups": [
+      {
+        "id": "identity",
+        "label": "身分證或居留證（正本、影本擇一）",
+        "rule": "ONE_OF"
+      }
+    ],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "交通部公路局各區監理所（站）",
+    "category": "監理",
+    "handlingUnit": "各區監理所（站）；部分站、分站未提供全部服務，出發前請電洽確認。",
+    "slug": "international-driving-permit",
+    "title": "申領國際駕照",
+    "summary": "持有效本國駕照申領國際駕照，準備身分證件、護照影本及兩張 2 吋照片；可委託代辦。",
+    "keywords": [
+      "國際駕照",
+      "国际驾照",
+      "國際駕駛執照",
+      "國外自駕",
+      "出國開車"
+    ],
+    "items": [
+      {
+        "key": "identity-original",
+        "title": "身分證或居留證正本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "identity-copy",
+        "title": "身分證或居留證影本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "license",
+        "title": "有效的本國駕照",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "note": "須在有效期內；職業駕照不得逾期審驗，否則先換照或補審。"
+      },
+      {
+        "key": "passport",
+        "title": "護照影本",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "COPY",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "note": "供核對英文姓名。"
+      },
+      {
+        "key": "photos",
+        "title": "近兩年同樣式 2 吋彩色照片",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 2,
+        "sourceIds": [
+          "international-license"
+        ],
+        "note": "光面、素色背景、脫帽、五官清晰且露耳的正面半身照片，不得使用合成照片。"
+      },
+      {
+        "key": "delegate-id",
+        "title": "代辦人國民身分證",
+        "kind": "DOCUMENT",
+        "party": "DELEGATE",
+        "modes": [
+          "DELEGATE"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "documentCode": "national-id"
+      },
+      {
+        "key": "address-change",
+        "title": "同時辦理駕照地址變更",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_address_differs"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "violations",
+        "title": "先清理未結違規案件",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ]
+      },
+      {
+        "key": "destination",
+        "title": "確認目的地承認及使用規定",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "note": "出國前查閱公路局主要國家（地區）駕照態度一覽表；國際駕照須搭配本國駕照使用。"
+      },
+      {
+        "key": "fee",
+        "title": "國際駕照規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF",
+          "DELEGATE"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "international-license"
+        ],
+        "amountTwd": 250,
+        "unit": "份"
+      }
+    ]
+  },
+  {
+    "revisionNo": 1,
+    "revisionId": "",
+    "verifiedAt": "2026-11-07",
+    "sources": [
+      {
+        "id": "vehicle-registration",
+        "url": "https://www.thb.gov.tw/cp.aspx?n=437",
+        "title": "交通部公路局：行照遺失損壞換發",
+        "clause": "應備證件、收費、注意事項（個人車主）",
+        "updatedAt": "2026-10-22",
+        "verifiedAt": "2026-11-07",
+        "sha256": "ddd6e3a349837d552873d0bf36316faaf242f67bc5d0915509e1176b854019b8"
+      }
+    ],
+    "parties": [
+      {
+        "code": "APPLICANT",
+        "label": "當事人要帶"
+      },
+      {
+        "code": "DELEGATE",
+        "label": "你（受委託人）要帶"
+      },
+      {
+        "code": "FEE",
+        "label": "請備妥費用"
+      }
+    ],
+    "modes": [
+      {
+        "code": "SELF",
+        "label": "本人親辦",
+        "allowed": true,
+        "allowedWhen": {
+          "==": [
+            {
+              "var": "q_insurance_valid"
+            },
+            true
+          ]
+        },
+        "disallowedReason": "強制險有效期間不足 30 日，不得補發行照；請先續保。"
+      }
+    ],
+    "questions": [
+      {
+        "code": "q_vehicle_type",
+        "prompt": "要補發哪一種車輛的行照？",
+        "type": "ENUM",
+        "options": [
+          {
+            "value": "CAR",
+            "label": "汽車"
+          },
+          {
+            "value": "MOTORCYCLE",
+            "label": "機車（含大型重型機車）"
+          }
+        ]
+      },
+      {
+        "code": "q_insurance_valid",
+        "prompt": "強制汽車責任保險證有效期間是否至少還有 30 日？",
+        "type": "BOOLEAN"
+      },
+      {
+        "code": "q_inspection_due",
+        "prompt": "汽車或大型重型機車是否已屆指定檢驗日期？",
+        "type": "BOOLEAN",
+        "helpText": "一般機車沒有此項檢驗需求時選「否」。"
+      }
+    ],
+    "groups": [
+      {
+        "id": "identity",
+        "label": "車主身分證明",
+        "rule": "ONE_OF"
+      }
+    ],
+    "processingTime": "官方頁面未載明處理時限，請洽承辦窗口。",
+    "agency": "交通部公路局各區監理所（站）",
+    "category": "監理",
+    "handlingUnit": "各區監理所（站）；部分站、分站未提供全部服務，出發前請電洽確認。 本清單涵蓋個人車主親辦；公司、行號或代辦所需文件請先洽監理所（站）。",
+    "slug": "vehicle-registration-replacement",
+    "title": "行照遺失／損壞補發（個人車主）",
+    "summary": "個人車主補換發汽機車行照，確認強制險有效天數、車種規費與到期檢驗。",
+    "keywords": [
+      "行照補發",
+      "行照遺失",
+      "行照换发",
+      "汽車行照",
+      "機車行照",
+      "行照損壞"
+    ],
+    "items": [
+      {
+        "key": "owner-id",
+        "title": "車主國民身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "owner-military",
+        "title": "車主軍人身分證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "owner-residence",
+        "title": "車主僑民居留證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "groupId": "identity"
+      },
+      {
+        "key": "seal",
+        "title": "車主印章",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ]
+      },
+      {
+        "key": "insurance",
+        "title": "有效期間至少 30 日的強制汽車責任保險證",
+        "kind": "DOCUMENT",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "ORIGINAL",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ]
+      },
+      {
+        "key": "inspection",
+        "title": "先完成到期的車輛檢驗並合格",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "condition": {
+          "==": [
+            {
+              "var": "q_inspection_due"
+            },
+            true
+          ]
+        }
+      },
+      {
+        "key": "arrears",
+        "title": "先結清未結違規、牌照稅及公路養管費",
+        "kind": "ACTION",
+        "party": "APPLICANT",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ]
+      },
+      {
+        "key": "car-fee",
+        "title": "汽車行照規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "amountTwd": 200,
+        "unit": "張",
+        "condition": {
+          "==": [
+            {
+              "var": "q_vehicle_type"
+            },
+            "CAR"
+          ]
+        }
+      },
+      {
+        "key": "motorcycle-fee",
+        "title": "機車行照規費",
+        "kind": "FEE",
+        "party": "FEE",
+        "modes": [
+          "SELF"
+        ],
+        "form": "NA",
+        "quantity": 1,
+        "sourceIds": [
+          "vehicle-registration"
+        ],
+        "amountTwd": 150,
+        "unit": "張",
+        "condition": {
+          "==": [
+            {
+              "var": "q_vehicle_type"
+            },
+            "MOTORCYCLE"
+          ]
+        }
+      }
+    ]
+  }
+]

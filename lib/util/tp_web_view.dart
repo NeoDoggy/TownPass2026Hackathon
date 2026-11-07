@@ -105,6 +105,8 @@ class TPWebView extends StatelessWidget {
 }
 
 class TPInAppWebView extends StatelessWidget {
+  /// Checklist needs no native account, location, or device access.
+  final bool enableTownPassBridge;
   final Set<Factory<OneSequenceGestureRecognizer>>? gestureRecognizers;
   final int? windowId;
   final HeadlessInAppWebView? headlessWebView;
@@ -178,6 +180,7 @@ class TPInAppWebView extends StatelessWidget {
 
   const TPInAppWebView({
     super.key,
+    this.enableTownPassBridge = true,
     this.gestureRecognizers,
     this.windowId,
     this.headlessWebView,
@@ -254,7 +257,9 @@ class TPInAppWebView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InAppWebView(
       onWebViewCreated: (controller) async {
-        await controller.addWebMessageListener(TPWebMessageListener.webMessageListener());
+        if (enableTownPassBridge) {
+          await controller.addWebMessageListener(TPWebMessageListener.webMessageListener());
+        }
         onWebViewCreated?.call(controller);
       },
       gestureRecognizers: gestureRecognizers,
