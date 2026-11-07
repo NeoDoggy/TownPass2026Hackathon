@@ -45,6 +45,21 @@ type Summary = Pick<
   ServiceSnapshot,
   "slug" | "title" | "agency" | "summary" | "category"
 >;
+// shortcut: Hours cover the current agencies; update from official announcements when agencies or schedules change.
+const agencyHours: Record<string, { hours: string; url: string }> = {
+  臺北市各區戶政事務所: {
+    hours: "週一至週五 08:30–17:30，中午持續服務；夜間、週末及國定假日不提供服務。",
+    url: "https://xyhr.gov.taipei/",
+  },
+  中華郵政股份有限公司: {
+    hours: "各郵局儲匯窗口營業時間不同，請依欲前往的據點查詢；部分儲匯業務假日不提供服務。",
+    url: "https://www.post.gov.tw/post/internet/I_location/index.jsp?ID=1901",
+  },
+  "交通部公路局各區監理所（站）": {
+    hours: "臺北市區監理所：週一至週五 08:30–17:30。",
+    url: "https://tpcmv.thb.gov.tw/cp.aspx?n=9319",
+  },
+};
 function App() {
   const [path, setPath] = useState(location.pathname);
   const [routeError, setRouteError] = useState("");
@@ -188,10 +203,9 @@ function Home({ navigate }: { navigate: (href: string) => void }) {
   return (
     <>
       <section className="hero" aria-labelledby="home-title">
-        <center>
         <h1 id="home-title" tabIndex={-1}>
           辦事帶什麼?
-        </h1></center>
+        </h1>
         <div role="search">
           <label className="sr-only" htmlFor="search">想辦什麼業務？</label>
           <input
@@ -352,27 +366,26 @@ function ServicePage({
             <h1 ref={headingRef} tabIndex={-1}>
               {service.title}
             </h1>
-            <p>{service.summary}</p>
+            {/* <p>{service.summary}</p> */}
             <dl className="service-meta">
               <div>
                 <dt>承辦機關</dt>
                 <dd>{service.agency}</dd>
               </div>
               <div>
-                <dt>處理時限</dt>
-                <dd>{service.processingTime}</dd>
-              </div>
-              <div>
-                <dt>受理地點</dt>
-                <dd>{service.handlingUnit}</dd>
-              </div>
-              <div>
-                <dt>資料版本</dt>
+                <dt>營業時間</dt>
                 <dd>
-                  第 {service.revisionNo} 版 · 查證日期{" "}
-                  <time dateTime={service.verifiedAt}>
-                    {service.verifiedAt}
-                  </time>
+                  {agencyHours[service.agency]?.hours ?? "請洽承辦機關確認服務時間。"}
+                  {/* {agencyHours[service.agency] && (
+                    <a
+                      className="hours-link"
+                      href={agencyHours[service.agency].url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      查詢官方服務時間（另開視窗）
+                    </a>
+                  )} */}
                 </dd>
               </div>
             </dl>
@@ -420,7 +433,7 @@ function ServicePage({
   );
 }
 function ChecklistView({ service }: { service: ServiceSnapshot }) {
-  const [announcement, announce] = useState("選好條件後，清單會即時更新。");
+  const [announcement, announce] = useState("");
   const [mode, setMode] = useState(() => {
     const stored = readStored<string>(`mode:${service.slug}`, "SELF");
     return service.modes.some((m) => m.code === stored) ? stored : "SELF";
@@ -509,6 +522,15 @@ function ChecklistPanel({
       : checked.includes(entry.key),
   ).length;
   const conditional = allItems.filter((i) => i.status === "CONDITIONAL").length;
+  const allChecked = entries.length > 0 && completed === entries.length;
+  const ready =
+    allChecked &&
+    result.eligibility === "TRUE" &&
+    result.pendingQuestions.length === 0;
+  const progressSummary =
+    result.eligibility === "FALSE"
+      ? `此方式不可辦理：${result.mode.disallowedReason ?? "請改選其他辦理方式"}`
+      : `清單已更新：共 ${entries.length} 項，已備妥 ${completed} 項${conditional ? `；${conditional} 份文件或程序視情況需要` : ""}。${storageOk ? "" : "目前無法保存。"}`;
   useEffect(() => {
     setStorageOk(
       writeStored(`${service.slug}:${mode}`, {
@@ -521,9 +543,7 @@ function ChecklistPanel({
   }, [service, mode, answers, checked]);
   const setAnswer = (code: string, value: string) => {
     const next = { ...result.answers };
-    delete next[code];
-    if (value !== "unknown")
-      next[code] = value === "true" ? true : value === "false" ? false : value;
+    next[code] = value === "true" ? true : value === "false" ? false : value;
     const updatedResult = resolve(service, mode, next);
     const after = updatedResult.sections.flatMap((s) =>
       s.entries.flatMap((e) => ("items" in e ? e.items : [e])),
@@ -608,7 +628,7 @@ function ChecklistPanel({
           target="_blank"
           rel="noopener noreferrer"
         >
-          {item.title}的官方依據（另開視窗）
+          官方依據（另開視窗）
         </a>
         {item.templateUrl && (
           <a href={item.templateUrl} target="_blank" rel="noopener noreferrer">
@@ -652,7 +672,6 @@ function ChecklistPanel({
       )}
       <section className="panel" aria-labelledby="questions-title">
         <h2 id="questions-title">2. 確認你的條件</h2>
-        <p>不確定也沒關係，可能需要的文件會繼續顯示。</p>
         {result.questions.length ? (
           result.questions.map((q) => (
             <fieldset key={q.code} className="question">
@@ -666,23 +685,20 @@ function ChecklistPanel({
                 className="choices"
                 aria-describedby={q.helpText ? `help-${q.code}` : undefined}
               >
-                {[
-                  ...(q.type === "BOOLEAN"
-                    ? [
-                        { value: "true", label: "是" },
-                        { value: "false", label: "否" },
-                      ]
-                    : q.options!),
-                  { value: "unknown", label: "不確定" },
-                ].map((option) => (
+                {(q.type === "BOOLEAN"
+                  ? [
+                      { value: "true", label: "是" },
+                      { value: "false", label: "否" },
+                    ]
+                  : q.options!
+                ).map((option) => (
                   <label className="choice" key={option.value}>
                     <input
                       type="radio"
                       name={q.code}
                       checked={
-                        (result.answers[q.code] === undefined
-                          ? "unknown"
-                          : String(result.answers[q.code])) === option.value
+                        result.answers[q.code] !== undefined &&
+                        String(result.answers[q.code]) === option.value
                       }
                       onChange={() => setAnswer(q.code, option.value)}
                     />
@@ -701,16 +717,29 @@ function ChecklistPanel({
           <h2 id="checklist-title">3. 準備清單</h2>
           <span className="pill">{result.mode.label}</span>
         </div>
-        <p className="progress-text">
-          {result.eligibility === "FALSE"
-            ? `此方式不可辦理：${result.mode.disallowedReason ?? "請改選其他辦理方式"}`
-            : `清單已更新：共 ${entries.length} 項，已備妥 ${completed} 項${conditional ? `；${conditional} 份文件或程序視情況需要` : ""}。${storageOk ? "已自動保存在此裝置。" : "目前無法保存。"}`}
-        </p>
+        <p className="progress-text">{progressSummary}</p>
         <progress
           max={Math.max(1, entries.length)}
           value={completed}
           aria-label={`準備進度：已備妥 ${completed} 項，共 ${entries.length} 項`}
         />
+        <div
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className={ready ? "notice completion-notice" : undefined}
+        >
+          {ready ? (
+            <>
+              <h3>
+                <span aria-hidden="true">✓ </span>材料已準備完成！
+              </h3>
+              <p>清單所需項目已全部備妥，出發前請再確認承辦機關的營業時間。</p>
+            </>
+          ) : allChecked && result.eligibility !== "FALSE" ? (
+            <p className="notice warning">勾選已完成，請先確認尚未確定的條件，才能確認材料已備妥。</p>
+          ) : null}
+        </div>
         {result.eligibility === "UNKNOWN" && (
           <p className="notice warning">
             請先回答相關條件，以確認能否由此方式辦理。下列清單仍保留可確定的項目。
@@ -728,6 +757,17 @@ function ChecklistPanel({
             </ul>
           </section>
         ))}
+        {entries.length > 0 && (
+          <div className={`checklist-progress-bottom${ready ? " notice completion-notice" : ""}`}>
+            <p className="progress-text">{progressSummary}</p>
+            <progress
+              max={Math.max(1, entries.length)}
+              value={completed}
+              aria-label={`準備進度：已備妥 ${completed} 項，共 ${entries.length} 項`}
+            />
+            {ready && <p><strong>✓ 材料已準備完成！</strong></p>}
+          </div>
+        )}
         <div className="actions">
           <button className="secondary" onClick={share}>
             複製業務連結
