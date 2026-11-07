@@ -51,7 +51,7 @@ test("home, search and both services keep heading levels in order", async ({
   page,
 }) => {
   await page.goto("/");
-  await expect(page.getByText("目前提供 9 項業務")).toBeVisible();
+  await expect(page.getByLabel("想辦什麼業務？")).toBeVisible();
   await checkHeadings(page);
   await page.getByLabel("想辦什麼業務？").fill("印監證明");
   await expect(page.getByText("找到 1 項業務")).toBeVisible();

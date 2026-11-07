@@ -172,12 +172,20 @@ main > section {
 .skip-link:focus {
   top: 1rem;
 }
+.sr-only:not(:focus) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
 .hero {
-  background: var(--tint);
-  border: 1px solid #c7d9dc;
-  border-radius: 1.2rem;
-  padding: clamp(1.2rem, 4vw, 2.5rem);
-  position: relative;
+  max-width: 700px;
+  margin: 3rem auto 2rem;
 }
 .eyebrow {
   font-size: 0.85rem;
@@ -185,34 +193,13 @@ main > section {
   letter-spacing: 0.08em;
   color: #356c77;
 }
-.hero > p {
-  font-size: 1.1rem;
-}
-.hero form {
-  margin-top: 1.7rem;
-  max-width: 700px;
-}
-.hero label {
-  display: block;
-  font-weight: 650;
-  margin-bottom: 0.4rem;
-}
-.search-row {
-  display: flex;
-  gap: 0.6rem;
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 2.3rem);
+  margin-bottom: 1.5rem;
 }
 .hint {
   font-size: 0.88rem;
   color: #415b62;
-}
-.steps {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  padding: 0.8rem 0.15rem 1.8rem;
-  font-size: 0.88rem;
-  font-weight: 650;
 }
 .section-heading {
   display: flex;
@@ -228,53 +215,50 @@ main > section {
   padding: 0.15rem 0.7rem;
   font-size: 0.8rem;
 }
-.service-grid {
+.service-cards {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
   gap: 1rem;
+  margin-top: 1rem;
 }
-.service-card {
+.service-cards > li {
+  min-width: 0;
+}
+.service-link {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  min-height: 64px;
   height: 100%;
-  padding: 1.4rem;
+  padding: 1rem;
   background: white;
   border: 1px solid #a6bec3;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
   color: #193c43;
-  text-decoration: none;
+  text-decoration-thickness: 1px;
 }
-.service-card:hover {
-  border-color: #356c77;
-  box-shadow: 0 3px 12px #22474e18;
+.service-link > div {
+  min-width: 0;
 }
-.service-card h3 {
-  margin: 0.7rem 0 0.3rem;
-  font-size: 1.35rem;
+.service-link:hover {
+  background: var(--tint);
 }
-.service-card h3 span {
-  float: right;
+.service-link h3 {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
 }
-.service-card p {
-  font-size: 0.95rem;
+.service-link p {
+  margin-bottom: 0;
 }
-.card-category {
-  color: #356c77;
-  font-size: 0.8rem;
-  font-weight: 650;
-}
-.card-action {
-  margin-top: auto;
-  padding-top: 1.3rem;
-  font-weight: 650;
-  color: #245c69;
-}
-.card-action span {
-  float: right;
-}
-.match {
-  font-size: 0.8rem;
-  padding: 0.5rem 0;
+.chevron {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
 }
 .notice {
   padding: 1.1rem 1.3rem;
@@ -292,14 +276,21 @@ main > section {
   border-color: #997316;
 }
 .site-footer {
-  padding: 1.5rem max(1.2rem, calc((100vw - 998px) / 2));
-  background: #e7f0f2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem 1rem;
+  padding: 1rem 1.2rem;
+  border-top: 1px solid #c7d9dc;
   color: #304d55;
   font-size: 0.85rem;
 }
+.site-footer p {
+  margin: 0;
+}
 .site-footer a {
   display: inline-block;
-  margin: 0.3rem 1rem 0.3rem 0;
   min-height: 48px;
   padding: 0.6rem 0;
 }
@@ -477,26 +468,7 @@ progress {
   border-bottom: 1px solid #c7d9dc;
   padding: 0.5rem 0 1rem;
 }
-.recent-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-.recent-list a {
-  display: inline-flex;
-  padding: 0.5rem 0.9rem;
-  min-height: 48px;
-  border: 1px solid #a6bec3;
-  border-radius: 0.5rem;
-  background: white;
-}
-.mobile-break {
-  display: none;
-}
 @media (max-width: 640px) {
-  .service-grid {
-    grid-template-columns: 1fr;
-  }
   .brand-en {
     display: none;
   }
@@ -509,25 +481,9 @@ progress {
   main {
     padding: 1rem 0.9rem 2rem;
   }
-  .hero {
-    padding: 1.2rem;
-  }
-  .mobile-break {
-    display: block;
-  }
-  .steps {
-    font-size: 0.76rem;
-    gap: 0.4rem;
-  }
   .service-meta > div {
     grid-template-columns: 1fr;
     gap: 0.2rem;
-  }
-  .search-row {
-    flex-wrap: wrap;
-  }
-  .search-row button {
-    width: 100%;
   }
   .actions {
     flex-direction: column;
@@ -557,9 +513,6 @@ progress {
   }
   .check-item {
     break-inside: avoid;
-  }
-  .hero {
-    background: white;
   }
   a {
     color: black;

@@ -4,7 +4,7 @@ test("postal and motor services can be found and link to their own official sour
   await page.goto("/");
   await page.getByLabel("想辦什麼業務？").fill("郵局");
   await expect(page.getByText("找到 4 項業務")).toBeVisible();
-  await page.getByRole("link", { name: /郵局存摺掛失補發.*查看準備清單/ }).click();
+  await page.getByRole("link", { name: /^郵局存摺掛失補發/ }).click();
   await expect(page.getByRole("checkbox", { name: "國民身分證" })).toBeVisible();
   await expect(page.getByRole("checkbox", { name: "儲金簿（存摺）" })).toHaveCount(0);
   const source = page.getByRole("link", { name: "國民身分證的官方依據（另開視窗）", exact: true });
@@ -14,7 +14,7 @@ test("postal and motor services can be found and link to their own official sour
   await page.goto("/");
   await page.getByLabel("想辦什麼業務？").fill("監理");
   await expect(page.getByText("找到 3 項業務")).toBeVisible();
-  await page.getByRole("link", { name: /行照遺失.*查看準備清單/ }).click();
+  await page.getByRole("link", { name: /行照遺失/ }).click();
   await page.getByRole("group", { name: "強制汽車責任保險證有效期間是否至少還有 30 日？" }).getByRole("radio", { name: "是", exact: true }).check();
   await page.getByRole("radio", { name: "機車（含大型重型機車）", exact: true }).check();
   await expect(page.getByRole("checkbox", { name: "機車行照規費" })).toBeVisible();

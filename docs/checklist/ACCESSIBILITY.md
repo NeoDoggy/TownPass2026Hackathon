@@ -15,11 +15,11 @@ npx playwright show-report
 
 `@axe-core/playwright` 使用 `wcag2a`、`wcag2aa`、`wcag21a`、`wcag21aa`、`wcag22aa` 與 `best-practice` 標籤，不停用規則、不排除頁面區域。每次掃描保存 violations、incomplete 與通過規則 ID。任何 violation 都使測試失敗；incomplete 必須看報告逐項判斷。手機 Chromium 模擬尺寸不等同真實 Android TalkBack 或 iOS VoiceOver。
 
-涵蓋首頁、搜尋結果、未答條件、委託／境外條件、保存後清單、法定代理人、無結果、320px 加文字兩倍、API 錯誤、儲存失敗。其他行為檢查包括鍵盤 skip link、checkbox Space 操作、返回、勾選／條件重新整理、清單改版與本機業務快取。
+涵蓋首頁、搜尋結果、未答條件、委託／境外條件、保存後清單、法定代理人、無結果、320px 加文字兩倍、API 錯誤、儲存失敗。首頁另測空白／純空白字元時不顯示業務、即時搜尋維持輸入焦點、清空後隱藏卡片、僅查無結果時提供全部業務入口、載入／失敗時不誤顯示無結果入口、重試、至少 48px 點擊高度與鍵盤開啟業務，以及 320px 加 225% 根字級與文字間距設定的首頁／搜尋／全部業務 reflow。其他行為檢查包括鍵盤 skip link、checkbox Space 操作、返回、勾選／條件重新整理、清單改版與本機業務快取。
 
 ### Freego 標題結構 HM1130100C
 
-[官方檢測碼 HM1130100C](https://accessibility.moda.gov.tw/Download/Detail/1506?Category=63) 對應 A 級 1.3.1／H42，需以適當的 h1–h6 表達標題結構。本專案各頁採一個 h1，主要區塊 h2、區塊內的業務／文件所屬人 h3，不向下跳級。
+[官方檢測碼 HM1130100C](https://accessibility.moda.gov.tw/Download/Detail/1506?Category=63) 對應 A 級 1.3.1／H42，需以適當的 h1–h6 表達標題結構。本專案各頁採一個 h1，主要區塊 h2；首頁有結果時保留供報讀導覽的 h2，業務名稱採 h3，清單頁的文件所屬人亦採 h3，不向下跳級。首頁搜尋框保留明確 label，搜尋結果透過固定的 polite status 通知；輸入時不自動移動焦點。
 
 已修正兩個可重現缺口：初始 HTML 原本只有空的 React root；業務資料載入中原本也沒有 h1。現在初始 HTML 有可見主標題、功能說明、未啟用 JavaScript 的提示及官方聯絡管道；React 啟動後會替換這些內容，不會保留重複的 h1。資料載入中亦提供主標題。
 

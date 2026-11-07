@@ -44,7 +44,7 @@ async function api<T>(
 type Summary = Pick<
   ServiceSnapshot,
   "slug" | "title" | "agency" | "summary" | "category"
-> & { matched?: string };
+>;
 function App() {
   const [path, setPath] = useState(location.pathname);
   const [routeError, setRouteError] = useState("");
@@ -120,16 +120,7 @@ function App() {
         {routeError && <p role="alert">{routeError}</p>}
       </main>
       <footer className="site-footer">
-        <p>辦事帶什麼 · 台北通城市生活</p>
-        <p>本服務僅提供行前準備資訊，實際應備文件以承辦機關現場規定為準。</p>
-        <p>條件答案與勾選僅保存在此瀏覽器／App，不會跨裝置同步。</p>
-        <a
-          href="https://www.gov.taipei/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          臺北市政府（另開視窗）
-        </a>
+        <p>文件以承辦機關規定為準；條件與勾選僅存於此裝置。</p>
         <a href="tel:1999">需要協助？撥打 1999</a>
       </footer>
     </>
@@ -139,10 +130,10 @@ function Home({ navigate }: { navigate: (href: string) => void }) {
   const [query, setQuery] = useState("");
   const [term, setTerm] = useState("");
   const [items, setItems] = useState<Summary[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [showAll, setShowAll] = useState(false);
   const [error, setError] = useState("");
   const [retry, setRetry] = useState(0);
-  const [recent] = useState(() => readStored<Summary[]>("recent", []));
   useEffect(() => {
     document.title = "辦事帶什麼｜台北通";
   }, []);
@@ -151,20 +142,28 @@ function Home({ navigate }: { navigate: (href: string) => void }) {
     return () => clearTimeout(timer);
   }, [query]);
   useEffect(() => {
+    if (!term && !showAll) {
+      setItems([]);
+      setLoading(false);
+      setError("");
+      return;
+    }
     const controller = new AbortController();
     setLoading(true);
     setError("");
+    setItems([]);
     const request = term
       ? api<{ items: Summary[] }>("/v1/search", controller.signal, { q: term })
       : api<{ items: Summary[] }>("/v1/services", controller.signal);
     request
       .then((data) => {
+        if (controller.signal.aborted) return;
         setItems(data.items);
         if (!term) writeStored("services", data.items);
       })
       .catch((e) => {
         if (!controller.signal.aborted) {
-          setError("目前無法連線。可重試，或開啟之前看過的業務。");
+          setError("目前無法連線，請重新載入，或撥打 1999 詢問。");
           setItems(!term ? readStored<Summary[]>("services", []) : []);
         }
       })
@@ -172,7 +171,7 @@ function Home({ navigate }: { navigate: (href: string) => void }) {
         if (!controller.signal.aborted) setLoading(false);
       });
     return () => controller.abort();
-  }, [term, retry]);
+  }, [term, showAll, retry]);
   const open = (event: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
     if (
       !event.ctrlKey &&
@@ -184,136 +183,94 @@ function Home({ navigate }: { navigate: (href: string) => void }) {
       navigate(`/services/${slug}`);
     }
   };
+  const showResults = Boolean(query.trim()) || showAll;
+  const pending = loading || query.trim() !== term;
   return (
     <>
       <section className="hero" aria-labelledby="home-title">
-        <p className="eyebrow">出門前，先把需要的備齊</p>
+        <center>
         <h1 id="home-title" tabIndex={-1}>
-          辦事帶什麼
-        </h1>
-        <p>
-          找業務、選辦理方式，
-          <br className="mobile-break" />
-          把應備文件一項項準備好。
-        </p>
-        <form
-          role="search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            setTerm(query.trim());
-            document.getElementById("results-heading")?.focus();
-          }}
-        >
-          <label htmlFor="search">想辦什麼業務？</label>
-          <div className="search-row">
-            <input
-              id="search"
-              type="search"
-              maxLength={30}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="例如：印鑑、郵局、駕照"
-              aria-describedby="search-help"
-              autoComplete="off"
-            />
-            <button type="submit">搜尋</button>
-          </div>
+          辦事帶什麼?
+        </h1></center>
+        <div role="search">
+          <label className="sr-only" htmlFor="search">想辦什麼業務？</label>
+          <input
+            id="search"
+            type="search"
+            maxLength={30}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setShowAll(false);
+            }}
+            placeholder="例如：印鑑、郵局、駕照"
+            aria-describedby="search-help"
+            autoComplete="off"
+          />
           <p id="search-help" className="hint">
-            輸入業務名稱即可，請勿輸入姓名、身分證字號等個人資料。
+            {/* 輸入業務名稱，即時查看清單。請勿填寫個人資料。 */}
           </p>
-        </form>
-      </section>
-      <div className="steps" role="group" aria-label="準備清單的三個步驟">
-        <span>1 找到業務</span>
-        <span>2 選擇條件</span>
-        <span>3 勾選備妥文件</span>
-      </div>
-      <section aria-labelledby="results-heading" aria-busy={loading}>
-        <div className="section-heading">
-          <h2 id="results-heading" tabIndex={-1}>
-            {term ? "搜尋結果" : "申辦業務"}
-          </h2>
-          <span className="pill">戶政・郵局・監理</span>
         </div>
-        <p role="status" aria-live="polite" aria-atomic="true">
-          {loading
-            ? "正在載入業務…"
-            : term
-              ? `找到 ${items.length} 項業務`
-              : `目前提供 ${items.length} 項業務`}
-        </p>
-        {error && (
-          <div role="alert" className="notice">
-            <p>{error}</p>
-            <button onClick={() => setRetry((n) => n + 1)}>重新載入</button>
-          </div>
-        )}
-        {!loading && !error && items.length === 0 && (
-          <div className="notice">
-            <h3>還沒找到想辦的業務？</h3>
-            <p>試試「印鑑」、「郵局」或「駕照」，也可向相關承辦機關詢問。</p>
-            <button
-              onClick={() => {
-                setQuery("");
-                setTerm("");
-              }}
-            >
-              查看所有業務
-            </button>
-          </div>
-        )}
-        <ul className="service-grid">
-          {items.map((item) => (
-            <li key={item.slug}>
-              <a
-                className="service-card"
-                href={`/services/${item.slug}`}
-                onClick={(e) => open(e, item.slug)}
-              >
-                <span className="card-category">{item.category}服務</span>
-                <h3>
-                  {item.title}
-                  <span aria-hidden="true"> ↗</span>
-                </h3>
-                <p>{item.summary}</p>
-                <span className="hint">{item.agency}</span>
-                {term && item.matched && (
-                  <span className="match">符合關鍵字：{item.matched}</span>
-                )}
-                <span className="card-action">
-                  查看準備清單 <span aria-hidden="true">→</span>
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
       </section>
-      {Array.isArray(recent) && recent.length > 0 && (
-        <section aria-labelledby="recent-heading">
-          <h2 id="recent-heading">最近看過</h2>
-          <ul className="recent-list">
-            {recent
-              .slice(0, 4)
-              .filter((s) => s && /^[a-z0-9-]+$/.test(s.slug))
-              .map((s) => (
-                <li key={s.slug}>
+      <p className={showResults ? "hint" : "sr-only"} role="status" aria-live="polite" aria-atomic="true">
+        {showResults
+          ? pending
+            ? "正在搜尋…"
+            : error
+              ? ""
+              : term
+                ? `找到 ${items.length} 項業務`
+                : `目前提供 ${items.length} 項業務`
+          : ""}
+      </p>
+      {showResults && (
+        <section aria-labelledby="results-heading" aria-busy={pending}>
+          <h2 className="sr-only" id="results-heading" tabIndex={-1}>
+            {showAll ? "所有業務" : "搜尋結果"}
+          </h2>
+          {!pending && error && (
+            <div role="alert" className="notice">
+              <p>{error}</p>
+              <button onClick={() => setRetry((n) => n + 1)}>重新載入</button>
+            </div>
+          )}
+          {!pending && !error && term && items.length === 0 && (
+            <div className="notice">
+              <h3>還沒找到想辦的業務？</h3>
+              <p>試試「印鑑」、「郵局」或「駕照」，也可向相關承辦機關詢問。</p>
+              <button
+                onClick={() => {
+                  setQuery("");
+                  setTerm("");
+                  setShowAll(true);
+                  document.getElementById("results-heading")?.focus();
+                }}
+              >
+                查看所有業務
+              </button>
+            </div>
+          )}
+          {!pending && (
+            <ul className="service-cards">
+              {items.map((item) => (
+                <li key={item.slug}>
                   <a
-                    href={`/services/${s.slug}`}
-                    onClick={(e) => open(e, s.slug)}
+                    className="service-link"
+                    href={`/services/${item.slug}`}
+                    onClick={(e) => open(e, item.slug)}
                   >
-                    {s.title}
+                    <div>
+                      <h3>{item.title}</h3>
+                      <p className="hint">{item.summary}</p>
+                    </div>
+                    <span className="chevron" aria-hidden="true" />
                   </a>
                 </li>
               ))}
-          </ul>
+            </ul>
+          )}
         </section>
       )}
-      <aside className="notice">
-        <h2>資料有依據，準備更安心</h2>
-        <p>
-          每份清單都附承辦機關官方來源、修訂日期與查證日期。未確定的條件會保留可能需要的文件，提醒你再向承辦機關確認。
-        </p>
-      </aside>
     </>
   );
 }
@@ -341,22 +298,6 @@ function ServicePage({
       .then((data) => {
         setService(data.service);
         writeStored(`cache:${slug}`, data.service);
-        const recent = readStored<Summary[]>("recent", []);
-        writeStored(
-          "recent",
-          [
-            {
-              slug: data.service.slug,
-              title: data.service.title,
-              agency: data.service.agency,
-              category: data.service.category,
-              summary: data.service.summary,
-            },
-            ...(Array.isArray(recent) ? recent : []).filter(
-              (s) => s.slug !== slug,
-            ),
-          ].slice(0, 4),
-        );
       })
       .catch((e) => {
         if (!controller.signal.aborted) {
